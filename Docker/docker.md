@@ -5,7 +5,9 @@
 - [Docker Komut Satiri](#docker-komut-satiri)
 - [Docker run stop remove](#docker-run-stop-remove)
 - [Konteyneri Baglanmak](#konteyneri-baglanmak)
-- [Konteyner Log](#konteyner-log)  
+- [Konteyner Log](#konteyner-log)
+- [Port Mapping](#port-mapping)  
+- 
 
 
 ## Docker Nedir?
@@ -125,13 +127,49 @@ docker volume create my_volume
 docker run -d --name my_container -v my_volume:/path/in/container my_image
 ```
 Burada `my_volume` adında bir Docker Volume oluşturuyoruz. Ardından, `my_container` adında bir konteyner oluştururken bu volume'ü kullanıyoruz. `-v my_volume:/path/in/container` komutu, `my_volume` adlı Docker Volume'ün `my_container` içindeki belirli bir yol ile eşleştirilmesini sağlar.
+***
+## Port Mapping
+Docker'da port eşlemesi (port mapping), host işletim sistemi ve Docker konteyneri arasında bir portun iletilmesini veya eşlenmesini sağlar. Bu işlem, dış dünyadan belirli bir port üzerinden Docker konteynerine erişimi mümkün kılar.
 
+Bir konteynerin belirli bir portunu host işletim sistemi üzerindeki bir porta eşlemek için `-p` veya `--publish` flag'ini kullanabiliriz. Örneğin:
 
+Docker Port Eşlemesi Oluşturma:
+```bash
+docker run -d -p 8080:80 my_image
+```
+Bu komut, `my_image` adlı Docker imajından bir konteyner oluştururken, host işletim sistemi üzerindeki `8080` portunu konteyner içindeki `80` porta yönlendirir.
+***
 
+## Docker Network
 
+Docker Network, Docker konteynerleri arasında iletişimi sağlayan ve konteynerlerin dış dünya ile iletişim kurmasını sağlayan bir yapıdır. Bu ağlar, konteynerler arasında veri paylaşımı, iletişim, mikroservis mimarileri ve uygulamaların birbiriyle etkileşimini yönetmek için kullanılır.
 
+Docker, farklı tiplerde ağlar sunar:
 
+1. Bridge Networks (Köprü Ağları): Varsayılan olarak Docker'ın sunduğu ağ tipidir. Konteynerler, bu ağda bulunan diğer konteynerlere veya host işletim sistemi üzerindeki uygulamalara bağlanabilir. İletişim, konteynerler arasında IP adresleri üzerinden yapılır.
 
+2. Overlay Networks (Örtü Ağları): Birden fazla Docker host'u arasında iletişimi sağlamak için kullanılır. Swarm gibi Docker'ın dağıtık uygulama ve yönetim araçlarında kullanılır.
+
+3. Macvlan Networks (Macvlan Ağları): Fiziksel ağ araçlarına daha benzer bir yapı sunar. Her konteyner, doğrudan fiziksel ağdan bir IP alabilir ve fiziksel ağdaki diğer cihazlar gibi davranabilir.
+
+Bu Docker ağları, konteynerler arasında iletişimi yönetmek ve belirli bir kullanım senaryosuna göre farklı ağ yapılarını desteklemek için kullanılır. İhtiyacınıza göre Docker ağlarını oluşturabilir, yönetebilir ve konteynerlerinizi bu ağlara bağlayabilirsiniz. 
+
+### Örnek Bridge Network Oluşturma:
+1. İlk olarak, bir köprü ağı oluşturalım:
+```bash
+docker network create my_bridge_network
+```
+Bu komut, `my_bridge_network` adında bir bridge network oluşturacaktır.
+
+2. Ardından, bu ağda çalışacak iki konteyner oluşturalım ve bu ağa bağlayalım:
+```bash
+docker run -d --name container1 --network my_bridge_network my_image1
+docker run -d --name container2 --network my_bridge_network my_image2
+```
+Burada `container1` ve `container2` adında iki farklı konteyner oluşturduk ve her ikisini de `my_bridge_network` adlı köprü ağına bağladık. `my_image1` ve `my_image2` yerine kullanacağınız Docker imajlarını belirtmelisiniz.
+
+Bu komutlar, `my_bridge_network` adlı ağda çalışan iki farklı konteyner oluşturur. Bu konteynerler aynı ağda bulundukları için birbirleriyle iletişim kurabilirler.
+***
 
 
 
