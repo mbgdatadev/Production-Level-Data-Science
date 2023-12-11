@@ -3,6 +3,9 @@
 - [Docker Nedir](#docker-nedir)
 - [Sanallastirma ve Konteynerleme Arasindaki Farklar](#sanallastirma-ve-konteynerleme-arasindaki-farklar)
 - [Docker Komut Satiri](#docker-komut-satiri)
+- [Docker run stop remove](#docker-run-stop-remove)
+- [Konteyneri Baglanmak](#konteyneri-baglanmak)
+- [Konteyner Log](#konteyner-log)  
 
 
 ## Docker Nedir?
@@ -60,3 +63,78 @@ Docker'ı kullanırken, sıkça kullanılan bazı komutlar şunlardır:
 - **Yardım ve Komut Bilgisi:** `docker help` veya `docker <komut> --help`
 
 ***
+
+# Docker run stop remove
+
+### Konteyneri Çalıştırmak:
+```bash
+docker start <konteyner_adı veya ID>
+```
+
+### Konteyneri Durdurmak:
+```bash
+docker stop <konteyner_adı veya ID>
+```
+
+### Konteyneri Silmek:
+```bash
+docker rm <konteyner_adı veya ID>
+```
+***
+## Konteyneri Baglanmak
+Konteynerlere bağlanma, Docker'da çalışan bir konteynerin içine girerek, içerideki işlemleri yönetme veya kontrol etme işlemidir. Genellikle bu, komut satırı aracılığıyla yapılır.
+
+Bir Docker konteynerine bağlanmak için docker exec komutunu kullanabilirsiniz. Örneğin, PostgreSQL konteynerine bağlanmak istediğinizi varsayalım:
+
+### PostgreSQL Konteynerine Bağlanma:
+```bash
+docker exec -it my-postgres bash
+```
+- `-it` parametresi, etkileşimli bir terminal oturumu başlatır.
+- `my-postgres` yerine kendi PostgreSQL konteynerinizin adını veya ID'sini kullanmalısınız.
+  Bu komut, PostgreSQL konteynerine bir bash oturumu başlatacaktır. Eğer PostgreSQL yerine başka bir servis veya işletim sistemi çalıştırıyorsanız, kullanmanız 
+  gereken komut biraz farklılık gösterebilir. Örneğin, Ubuntu tabanlı bir konteynerde çalışıyorsanız, `bash` yerine `sh` kullanabilirsiniz.
+***
+
+## Konteyner Log
+Konteyner logları, Docker konteynerlerinin çalışması sırasında oluşan çeşitli olayların kaydını tutar. Bu loglar, konteynerin çalışma durumu, hata mesajları, uygulama çıktıları ve daha fazlasını içerebilir. Loglar, konteynerin durumunu anlamak, hata ayıklama yapmak veya performans analizi gibi amaçlarla kullanılabilir.
+
+Docker loglarını görmek için `docker logs` komutunu kullanabilirsiniz. Örneğin, belirli bir konteynerin loglarını görmek için:
+
+### Konteyner Loglarını Görüntüleme:
+```bash
+docker exec -it my-postgres bash
+```
+Bu komut, belirtilen konteynerin loglarını terminalinizde görüntüler.
+***
+## Docker Volume
+Docker Volume'ü, Docker konteynerleri içinde veri saklamak veya veri paylaşımı sağlamak için kullanılan bir yapıdır. Bu yapı, konteynerler arasında veri paylaşımını kolaylaştırırken veri saklama ve veri kaybını önleme konusunda da yardımcı olur.
+
+Docker Volume'leri, konteynerlerin dosya sistemleri dışında depolama alanları olarak düşünebiliriz. Özellikle, konteynerler silinse veya yeniden oluşturulsa bile bu volume'lerin içeriği korunur.
+
+Volume'ler, `docker volume create` komutu veya bir konteyner oluştururken `-v` veya `--volume` flag'ini kullanarak oluşturulabilir. Örneğin:
+
+### Docker Volume Oluşturma:
+```bash
+docker volume create my_volume
+
+```
+
+### Konteyner Oluştururken Volume Kullanımı:
+```bash
+docker run -d --name my_container -v my_volume:/path/in/container my_image
+```
+Burada `my_volume` adında bir Docker Volume oluşturuyoruz. Ardından, `my_container` adında bir konteyner oluştururken bu volume'ü kullanıyoruz. `-v my_volume:/path/in/container` komutu, `my_volume` adlı Docker Volume'ün `my_container` içindeki belirli bir yol ile eşleştirilmesini sağlar.
+
+
+
+
+
+
+
+
+
+
+
+
+
