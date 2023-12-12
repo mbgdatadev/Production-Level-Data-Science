@@ -7,7 +7,7 @@
 - [Konteyneri Baglanmak](#konteyneri-baglanmak)
 - [Konteyner Log](#konteyner-log)
 - [Port Mapping](#port-mapping)  
-- 
+- [Dockerfile](#dockerfile)
 
 
 ## Docker Nedir?
@@ -170,9 +170,70 @@ Burada `container1` ve `container2` adında iki farklı konteyner oluşturduk ve
 
 Bu komutlar, `my_bridge_network` adlı ağda çalışan iki farklı konteyner oluşturur. Bu konteynerler aynı ağda bulundukları için birbirleriyle iletişim kurabilirler.
 ***
+## Dockerfile
+Dockerfile, Docker konteynerlerini oluşturmak için kullanılan metin tabanlı bir dosyadır. Bu dosya, bir Docker imajının nasıl oluşturulacağını adım adım tanımlar. Dockerfile, bir konteynerin yapılandırmasını, gereksinimlerini, çalıştırılacak komutları ve daha fazlasını belirtir.
+
+Bir Dockerfile oluşturmak için metin tabanlı bir editör kullanabilirsiniz. Dockerfile, genellikle bir projenin kök dizininde Dockerfile adıyla saklanır.
+
+İşte basit bir Dockerfile örneği:
+
+```dockerfile
+# Base image
+FROM ubuntu:latest
+
+# Author
+LABEL maintainer="Benim Adım <benim@email.com>"
+
+# Update package lists
+RUN apt-get update -y
+
+# Install necessary packages
+RUN apt-get install -y python3 python3-pip
+
+# Set working directory
+WORKDIR /app
+
+# Copy project files to the container
+COPY . /app
+
+# Expose port
+EXPOSE 80
+
+# Default command to execute when container starts
+CMD ["python3", "app.py"]
+```
+Bu Dockerfile örneği, bir Ubuntu imajını temel alarak Python uygulaması için bir Docker imajı oluşturur. `FROM` komutu temel imajı belirtirken, `RUN` komutları imaj içinde çalıştırılacak komutları tanımlar. `COPY`komutu ise projedeki dosyaları konteyner içine kopyalar. Son olarak, `EXPOSE` komutu belirli bir porta servis yayınlamayı, `CMD` komutu ise konteyner başladığında çalıştırılacak komutları belirtir.
 
 
+Basit bir Python uygulaması için Dockerfile ve bu Dockerfile'ı kullanarak Docker imajı oluşturma adımları:
 
+Dockerfile Oluşturma:
 
+```dockerfile
+# Base image
+FROM python:3.9-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements file
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install -r requirements.txt
+
+# Copy uygulama dosyalarını (örneğin, app.py) konteynere ekle
+COPY ./app.py
+
+# Uygulamayı çalıştırmak için varsayılan komut
+CMD ["python", "app.py"]
+
+```
+### Docker İmajı Oluşturma:
+Dockerfile'ı projenizin kök dizininde sakladıktan sonra şu komutla Docker imajını oluşturabilirsiniz:
+
+```bash
+docker build -t my-python-app .
+```
 
 
